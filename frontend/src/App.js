@@ -120,6 +120,7 @@ function App() {
     // ... inside your App component ...
 const [authError, setAuthError] = useState(''); // New state for error messages
 
+// --- AUTH HANDLERS ---
 const handleLogin = async () => {
     setAuthError(''); // Clear previous errors
     const { data, error } = await supabase.auth.signInWithPassword({
