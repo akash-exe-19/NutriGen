@@ -232,8 +232,26 @@ function App() {
 }
 
 const styles = {
-    container: { maxWidth: '900px', margin: '0 auto', padding: '40px 20px', color: '#fff', fontFamily: "system-ui, sans-serif" },
-    nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' },
+    container: { 
+        maxWidth: '100%', // Changed from 900px to 100% for the background
+        minHeight: '100vh', // Forces it to fill the whole screen height
+        margin: '0', 
+        padding: '40px 20px', 
+        color: '#fff', 
+        fontFamily: "system-ui, sans-serif",
+        backgroundColor: '#000', // Matches the dark theme
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    nav: { 
+        width: '100%',
+        maxWidth: '900px', // Keeps your content centered and readable
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: '40px' 
+    },
     logoText: { fontSize: '2rem', fontWeight: '900', cursor: 'pointer', margin: 0 },
     summaryCard: { background: '#38a169', padding: '25px', borderRadius: '24px', marginBottom: '30px' },
     summaryVal: { fontSize: '2rem', fontWeight: 'bold' },
@@ -241,7 +259,14 @@ const styles = {
     optionCard: { background: '#111', padding: '30px', borderRadius: '24px', border: '1px solid #222', cursor: 'pointer' },
     cardTitle: { margin: '10px 0 5px 0' },
     cardDesc: { color: '#666', fontSize: '0.85rem' },
-    card: { background: '#111', padding: '40px', borderRadius: '24px', border: '1px solid #222' },
+    card: { 
+        background: '#111', 
+        padding: '40px', 
+        borderRadius: '24px', 
+        border: '1px solid #222',
+        width: '100%',
+        maxWidth: '450px' // Keeps the login box from getting too wide
+    },
     input: { width: '100%', padding: '14px', margin: '10px 0', borderRadius: '12px', background: '#000', border: '1px solid #333', color: '#fff', boxSizing: 'border-box' },
     primaryBtn: { background: '#38a169', color: '#fff', padding: '14px 24px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer' },
     btnSecondary: { background: '#222', color: '#fff', padding: '14px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box' },
