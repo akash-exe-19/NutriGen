@@ -84,6 +84,14 @@ def analyze_product_data(product_json):
                     "genotype": f"Optimal ({round(value, 1)}{rule['unit']})",
                     "recommendation": rule["msg"]
                 })
+            else:
+                recommendations.append({
+                    "gene": "Standard",
+                    "rsid": nutrient_label,
+                    "trait": "Nutrient Balance",
+                    "genotype": f"Normal ({round(value, 1)}{rule['unit']})",
+                    "recommendation": "Within limits."
+                })
     return recommendations
 
 # --- QUIZ ANALYSIS LOGIC ---

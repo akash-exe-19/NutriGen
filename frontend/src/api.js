@@ -12,7 +12,7 @@ export const uploadDNA = async (file) => {
 };
 
 export const submitManualData = async (assessmentData) => {
-    const response = await fetch(`${API_URL}/manual-assessment`, {
+    const response = await fetch(`${API_URL}/analyze-quiz`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(assessmentData),
