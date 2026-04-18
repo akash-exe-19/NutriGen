@@ -302,51 +302,59 @@ const handleSignUp = async () => {
 
 const styles = {
     container: { 
-        maxWidth: '100%', // Changed from 900px to 100% for the background
-        minHeight: '100vh', // Forces it to fill the whole screen height
+        maxWidth: '100vw', 
+        minHeight: '100vh', 
         margin: '0', 
-        padding: '40px 20px', 
+        padding: '20px 15px', 
         color: '#fff', 
         fontFamily: "system-ui, sans-serif",
-        backgroundColor: '#000', // Matches the dark theme
+        backgroundColor: '#000',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
     },
     nav: { 
         width: '100%',
-        maxWidth: '900px', // Keeps your content centered and readable
+        maxWidth: '900px', 
         display: 'flex', 
+        flexWrap: 'wrap',
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '40px' 
+        marginBottom: '30px',
+        gap: '15px'
     },
-    logoText: { fontSize: '2rem', fontWeight: '900', cursor: 'pointer', margin: 0 },
-    summaryCard: { background: '#38a169', padding: '25px', borderRadius: '24px', marginBottom: '30px' },
-    summaryVal: { fontSize: '2rem', fontWeight: 'bold' },
-    menuGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' },
-    optionCard: { background: '#111', padding: '30px', borderRadius: '24px', border: '1px solid #222', cursor: 'pointer' },
-    cardTitle: { margin: '10px 0 5px 0' },
-    cardDesc: { color: '#666', fontSize: '0.85rem' },
+    logoText: { fontSize: '1.8rem', fontWeight: '900', cursor: 'pointer', margin: 0 },
+    summaryCard: { background: '#38a169', padding: '20px', borderRadius: '20px', marginBottom: '30px', width: '100%', boxSizing: 'border-box' },
+    summaryVal: { fontSize: '1.8rem', fontWeight: 'bold' },
+    menuGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', width: '100%', boxSizing: 'border-box' },
+    optionCard: { background: '#111', padding: '25px', borderRadius: '20px', border: '1px solid #222', cursor: 'pointer', boxSizing: 'border-box' },
+    cardTitle: { margin: '10px 0 5px 0', fontSize: '1.1rem' },
+    cardDesc: { color: '#aaacae', fontSize: '0.85rem', lineHeight: '1.4' },
     card: { 
         background: '#111', 
-        padding: '40px', 
+        padding: '30px 20px', 
         borderRadius: '24px', 
         border: '1px solid #222',
         width: '100%',
-        maxWidth: '450px' // Keeps the login box from getting too wide
+        maxWidth: '450px',
+        boxSizing: 'border-box'
     },
-    input: { width: '100%', padding: '14px', margin: '10px 0', borderRadius: '12px', background: '#000', border: '1px solid #333', color: '#fff', boxSizing: 'border-box' },
-    primaryBtn: { background: '#38a169', color: '#fff', padding: '14px 24px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer' },
-    btnSecondary: { background: '#222', color: '#fff', padding: '14px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box' },
-    historyItem: { background: '#111', padding: '20px', borderRadius: '16px', border: '1px solid #222', marginBottom: '15px', display: 'flex', alignItems: 'center' },
-    nutrientTag: { background: '#222', padding: '4px 10px', borderRadius: '8px', fontSize: '0.8rem', marginRight: '8px', color: '#aaa' },
-    deleteBtn: { background: 'none', border: '1px solid #ff4d4d', color: '#ff4d4d', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer' },
-    tagActive: { padding: '8px 16px', borderRadius: '20px', border: '1px solid #38a169', background: 'rgba(56, 161, 105, 0.1)', color: '#38a169' },
-    tag: { padding: '8px 16px', borderRadius: '20px', border: '1px solid #333', background: '#000', color: '#666', cursor: 'pointer' },
-    backBtn: { background: 'none', border: 'none', color: '#555', cursor: 'pointer', marginTop: '20px', textDecoration: 'underline' },
-    logoutBtn: { border: '1px solid #222', background: 'none', color: '#444', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer' },
-    planHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }
+    input: { width: '100%', padding: '14px', margin: '10px 0', borderRadius: '12px', background: '#000', border: '1px solid #333', color: '#fff', boxSizing: 'border-box', fontSize: '1rem' },
+    primaryBtn: { background: '#38a169', color: '#fff', padding: '14px 24px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' },
+    btnSecondary: { background: '#222', color: '#fff', padding: '14px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', display: 'block', width: '100%', boxSizing: 'border-box', fontSize: '1rem' },
+    historyItem: { background: '#111', padding: '15px', borderRadius: '16px', border: '1px solid #222', marginBottom: '15px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '15px', justifyContent: 'space-between', boxSizing: 'border-box' },
+    nutrientTag: { background: '#222', padding: '4px 8px', borderRadius: '8px', fontSize: '0.8rem', marginRight: '6px', marginBottom: '6px', color: '#aaa', display: 'inline-block', wordBreak: 'break-word' },
+    deleteBtn: { background: 'none', border: '1px solid #ff4d4d', color: '#ff4d4d', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', alignSelf: 'flex-start' },
+    tagActive: { padding: '8px 16px', borderRadius: '20px', border: '1px solid #38a169', background: 'rgba(56, 161, 105, 0.1)', color: '#38a169', margin: '5px' },
+    tag: { padding: '8px 16px', borderRadius: '20px', border: '1px solid #333', background: '#000', color: '#666', cursor: 'pointer', margin: '5px' },
+    backBtn: { background: 'none', border: 'none', color: '#888', cursor: 'pointer', marginTop: '20px', textDecoration: 'underline', padding: 0, fontSize: '1rem' },
+    logoutBtn: { border: '1px solid #222', background: 'none', color: '#efefef', padding: '8px 16px', borderRadius: '10px', cursor: 'pointer' },
+    planHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '15px' },
+    planView: { width: '100%', maxWidth: '900px', boxSizing: 'border-box' },
+    resultsHeader: { width: '100%', maxWidth: '900px', boxSizing: 'border-box' },
+    productTitle: { fontSize: '1.5rem', wordBreak: 'break-word', marginTop: 0 }
 };
 
 export default App;
