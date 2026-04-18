@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+from typing import List
 import json
 import os
 import requests
@@ -85,6 +87,10 @@ def analyze_product_data(product_json):
     return recommendations
 
 # --- QUIZ ANALYSIS LOGIC ---
+class QuizData(BaseModel):
+    goal: str
+    symptoms: List[str]
+
 @app.post("/analyze-quiz")
 async def analyze_quiz(data: QuizData):
     recommendations = []
