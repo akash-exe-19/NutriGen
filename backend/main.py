@@ -84,6 +84,36 @@ def analyze_product_data(product_json):
                 })
     return recommendations
 
+# --- QUIZ ANALYSIS LOGIC ---
+@app.post("/analyze-quiz")
+async def analyze_quiz(data: QuizData):
+    recommendations = []
+    goals_db = HEALTH_DATABASE.get("goal_map", {})
+    
+    # Check Goal
+    if data.goal in goals_db:
+        goal_info = goals_db[data.goal]
+        recommendations.append({
+            "gene": "Goal Strategy",
+            "rsid": f"Target: {data.goal}",
+            "trait": goal_info.get("trait", "Analysis"),
+            "genotype": "Priority",
+            "recommendation": goal_info.get("rec", "")
+        })
+
+    # Check Symptoms
+    symptoms_db = HEALTH_DATABASE.get("symptom_map", {})
+    for symptom in data.symptoms:
+        if symptom in symptoms_db:
+            recommendations.append({
+                "gene": "Symptom Support",
+                "rsid": symptom,
+                "trait": "Dietary Adjustment",
+                "genotype": "Detected",
+                "recommendation": symptoms_db[symptom]
+            })
+    return {"status": "success", "data": recommendations}
+
 # --- ENDPOINTS ---
 
 @app.get("/")
