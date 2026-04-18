@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "https://nutrigen-f092.onrender.com";
 
 export const uploadDNA = async (file) => {
     const formData = new FormData();

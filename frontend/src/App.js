@@ -86,7 +86,7 @@ function App() {
     const handleBarcodeSearch = async (val = barcode) => {
         if (!val) return; setIsLoading(true);
         try {
-            const response = await fetch(`http://localhost:8000/scan-barcode/${val}`);
+            const response = await fetch(`https://nutrigen-f092.onrender.com/scan-barcode/${val}`);
             const result = await response.json();
             if (result.status === "success") { setAnalysisData(result.data); setProductName(result.product_name); }
         } catch (err) { alert("Barcode failed"); } finally { setIsLoading(false); }
@@ -96,7 +96,7 @@ function App() {
         const file = e.target.files[0]; if (!file) return; setIsLoading(true);
         const formData = new FormData(); formData.append("file", file);
         try {
-            const response = await fetch("http://localhost:8000/upload-barcode-photo", { method: "POST", body: formData });
+            const response = await fetch("https://nutrigen-f092.onrender.com/upload-barcode-photo", { method: "POST", body: formData });
             const result = await response.json();
             if (result.status === "success") { setAnalysisData(result.data); setProductName(result.product_name); }
         } catch (err) { alert("Photo failed"); } finally { setIsLoading(false); }
