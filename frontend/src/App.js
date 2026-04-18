@@ -117,20 +117,88 @@ function App() {
             <p style={styles.cardDesc}>{desc}</p>
         </div>
     );
+    // ... inside your App component ...
+const [authError, setAuthError] = useState(''); // New state for error messages
+
+const handleLogin = async () => {
+    setAuthError(''); // Clear previous errors
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+
+    if (error) {
+        // Handle specific Supabase error cases
+        if (error.message.includes("Invalid login credentials")) {
+            // This covers both "Email not found" and "Wrong password" for security
+            // But we can check for the "User not found" specific string if your project settings allow it
+            setAuthError("Incorrect password or email not registered.");
+        } else if (error.status === 400) {
+            setAuthError("Email not found. Please sign up first.");
+        } else {
+            setAuthError(error.message);
+        }
+    }
+};
+
+const handleSignUp = async () => {
+    setAuthError('');
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+    });
+    if (error) setAuthError(error.message);
+    else alert("Check your email for the confirmation link!");
+};
 
     if (!user) {
-        return (
-            <div style={styles.container}>
-                <h1 style={styles.logoText}>NutriGen<span style={{color: '#38a169'}}>.</span></h1>
-                <div style={styles.card}>
-                    <input style={styles.input} placeholder="Email" onChange={e => setEmail(e.target.value)} />
-                    <input style={styles.input} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
-                    <button style={styles.primaryBtn} onClick={() => supabase.auth.signInWithPassword({email, password})}>Login</button>
-                    <button style={{...styles.primaryBtn, background: '#222', marginTop: '10px'}} onClick={() => supabase.auth.signUp({email, password})}>Sign Up</button>
+    return (
+        <div style={styles.container}>
+            <h1 style={styles.logoText}>NutriGen<span style={{color: '#38a169'}}>.</span></h1>
+            <div style={styles.card}>
+                <h3 style={{marginTop: 0, marginBottom: '20px'}}>Welcome Back</h3>
+                
+                <input 
+                    style={styles.input} 
+                    placeholder="Email" 
+                    type="email"
+                    onChange={e => setEmail(e.target.value)} 
+                />
+                <input 
+                    style={styles.input} 
+                    type="password" 
+                    placeholder="Password" 
+                    onChange={e => setPassword(e.target.value)} 
+                />
+
+                {/* Display Error Message here */}
+                {authError && (
+                    <div style={{
+                        color: '#ff4d4d', 
+                        fontSize: '0.85rem', 
+                        marginBottom: '15px',
+                        textAlign: 'left',
+                        padding: '0 5px'
+                    }}>
+                        {authError}
+                    </div>
+                )}
+
+                <div style={{display: 'flex', gap: '10px'}}>
+                    <button style={{...styles.primaryBtn, flex: 1}} onClick={handleLogin}>
+                        Login
+                    </button>
+                    <button 
+                        style={{...styles.primaryBtn, background: '#222', flex: 1}} 
+                        onClick={handleSignUp}
+                    >
+                        Sign Up
+                    </button>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+}
 
     return (
         <div style={styles.container}>

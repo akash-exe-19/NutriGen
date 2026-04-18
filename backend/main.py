@@ -11,11 +11,12 @@ from pyzbar.pyzbar import decode
 
 app = FastAPI()
 
-# --- UPDATED CORS FOR PRODUCTION ---
+# --- CORS SETTINGS ---
+# Allows your specific Netlify frontend to talk to this backend
 origins = [
     "http://localhost:3000",
-    "https://nutrigen-site.netlify.app", # Replace with your ACTUAL Netlify URL
-    "*" # Use "*" temporarily if you want to ensure it works during the presentation
+    "https://nutrigen-site.netlify.app", # Replace with your actual Netlify URL
+    "*" # Keep "*" during your presentation to ensure no connection issues
 ]
 
 app.add_middleware(
@@ -36,14 +37,14 @@ try:
 except FileNotFoundError:
     HEALTH_DATABASE = {"ingredient_red_flags": {}, "nutrient_limits": {}}
 
-# --- REUSABLE ANALYSIS LOGIC (Barcode & Quiz) ---
+# --- NUTRITIONAL ANALYSIS LOGIC ---
 def analyze_product_data(product_json):
     product = product_json.get("product", {})
     recommendations = []
     nutriments = product.get("nutriments", {})
     ingredients_text = product.get("ingredients_text", "").lower()
 
-    # Ingredient Flags
+    # 1. Ingredient Flags
     red_flags = HEALTH_DATABASE.get("ingredient_red_flags", {})
     for ingredient, warning in red_flags.items():
         if ingredient.lower() in ingredients_text:
@@ -55,13 +56,14 @@ def analyze_product_data(product_json):
                 "recommendation": warning
             })
 
-    # Nutrient Logic formatted for Daily Summary
+    # 2. Nutrient Table Logic (Formatted for Frontend Summary)
     limits = HEALTH_DATABASE.get("nutrient_limits", {})
     for nutrient, rule in limits.items():
         key_100g = f"{nutrient.lower()}_100g"
         value = nutriments.get(key_100g)
 
         if value is not None:
+            # Format rsid as "Nutrient: ValueUnits" for the frontend calculator
             nutrient_label = f"{nutrient.capitalize()}: {round(float(value), 1)}{rule.get('unit', 'g')}"
             
             if "max" in rule and float(value) > rule["max"]:
@@ -86,7 +88,7 @@ def analyze_product_data(product_json):
 
 @app.get("/")
 async def health_check():
-    return {"status": "online", "message": "NutriGen Backend is running on Render"}
+    return {"status": "online", "message": "NutriGen Backend Live"}
 
 @app.get("/scan-barcode/{barcode}")
 async def scan_barcode(barcode: str):
@@ -115,7 +117,6 @@ async def upload_barcode_photo(file: UploadFile = File(...)):
         return {"status": "error", "message": "No barcode detected."}
     return await scan_barcode(detected[0].data.decode("utf-8"))
 
-# For Production (Render)
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 10000))
