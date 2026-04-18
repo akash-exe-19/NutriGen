@@ -1,13 +1,12 @@
-# Use the official Python image
-FROM python:3.9-slim
+# Use a full python image instead of slim for better compatibility
+FROM python:3.9-buster
 
-# Install system dependencies for pyzbar and Pillow
-RUN apt-get update && apt-get install -y \
+# Update and install system dependencies with a fix for "Exit Code 100"
+RUN apt-get update --fix-missing && apt-get install -y \
     libzbar0 \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
 WORKDIR /app
 
 # Copy requirements and install
@@ -17,5 +16,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the code
 COPY . .
 
-# Start the application
+# Use the PORT environment variable provided by Render
 CMD uvicorn main:app --host 0.0.0.0 --port $PORT
