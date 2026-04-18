@@ -1,20 +1,21 @@
-# Use a full python image instead of slim for better compatibility
-FROM python:3.9-buster
+# Use Bullseye - it's the stable successor to Buster and has active mirrors
+FROM python:3.9-bullseye
 
-# Update and install system dependencies with a fix for "Exit Code 100"
-RUN apt-get update --fix-missing && apt-get install -y \
+# Install system dependencies for barcode scanning (libzbar0)
+# We use --quiet to keep logs clean and --no-install-recommends to save space
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libzbar0 \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy requirements and install
+# Copy requirements first to leverage Docker's cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the code
+# Copy the rest of your backend code
 COPY . .
 
-# Use the PORT environment variable provided by Render
+# Start the app using the dynamic PORT assigned by Render
 CMD uvicorn main:app --host 0.0.0.0 --port $PORT
