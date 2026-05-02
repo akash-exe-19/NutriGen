@@ -8,17 +8,16 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-from PIL import Image
+from PIL import Image, ImageEnhance
 from pyzbar.pyzbar import decode
 
 app = FastAPI()
 
-# --- CORS SETTINGS ---
-# Allows your specific Netlify frontend to talk to this backend
+# --- CORS SETTINGS --
 origins = [
     "http://localhost:3000",
-    "https://nutrigen-site.netlify.app", # Replace with your actual Netlify URL
-    "*" # Keep "*" during your presentation to ensure no connection issues
+    "https://nutrigen-site.netlify.app", 
+    "*"
 ]
 
 app.add_middleware(
@@ -44,12 +43,17 @@ def analyze_product_data(product_json):
     product = product_json.get("product", {})
     recommendations = []
     nutriments = product.get("nutriments", {})
-    ingredients_text = product.get("ingredients_text", "").lower()
+    ingredients_text = product.get("ingredients_text", "") or ""
+    ingredients_text_en = product.get("ingredients_text_en", "") or ""
+    ingredients_tags = product.get("ingredients_tags", []) or []
+    
+    tags_text = " ".join([tag.replace("-", " ") for tag in ingredients_tags])
+    combined_ingredients = f"{ingredients_text} {ingredients_text_en} {tags_text}".lower()
 
     # 1. Ingredient Flags
     red_flags = HEALTH_DATABASE.get("ingredient_red_flags", {})
     for ingredient, warning in red_flags.items():
-        if ingredient.lower() in ingredients_text:
+        if ingredient.lower() in combined_ingredients:
             recommendations.append({
                 "gene": "Additive Alert",
                 "rsid": ingredient,
@@ -156,9 +160,24 @@ async def scan_barcode(barcode: str):
 async def upload_barcode_photo(file: UploadFile = File(...)):
     contents = await file.read()
     image = Image.open(io.BytesIO(contents))
+    
     detected = decode(image)
     if not detected:
-        return {"status": "error", "message": "No barcode detected."}
+        # Try grayscale
+        gray = image.convert('L')
+        detected = decode(gray)
+    if not detected:
+        # Try higher contrast
+        enhancer = ImageEnhance.Contrast(gray)
+        contrast = enhancer.enhance(2.0)
+        detected = decode(contrast)
+    if not detected:
+        # Try rotating
+        detected = decode(image.rotate(90, expand=True))
+        
+    if not detected:
+        return {"status": "error", "message": "No barcode detected. Please try a clearer image."}
+        
     return await scan_barcode(detected[0].data.decode("utf-8"))
 
 if __name__ == "__main__":

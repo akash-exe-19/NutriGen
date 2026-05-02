@@ -117,8 +117,7 @@ function App() {
             <p style={styles.cardDesc}>{desc}</p>
         </div>
     );
-    // ... inside your App component ...
-const [authError, setAuthError] = useState(''); // New state for error messages
+const [authError, setAuthError] = useState(''); 
 
 // --- AUTH HANDLERS ---
 const handleLogin = async () => {
