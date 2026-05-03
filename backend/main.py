@@ -4,7 +4,7 @@ import json
 import os
 import requests
 import io
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
@@ -39,7 +39,7 @@ except FileNotFoundError:
     HEALTH_DATABASE = {"ingredient_red_flags": {}, "nutrient_limits": {}}
 
 # --- NUTRITIONAL ANALYSIS LOGIC ---
-def analyze_product_data(product_json):
+def analyze_product_data(product_json, age=None, gender=None):
     product = product_json.get("product", {})
     recommendations = []
     nutriments = product.get("nutriments", {})
@@ -63,7 +63,22 @@ def analyze_product_data(product_json):
             })
 
     # 2. Nutrient Table Logic (Formatted for Frontend Summary)
-    limits = HEALTH_DATABASE.get("nutrient_limits", {})
+    limits_db = HEALTH_DATABASE.get("nutrient_limits", {})
+    
+    if age is not None and gender is not None:
+        gender_key = gender.lower()
+        if gender_key in limits_db:
+            age_group = "adults"
+            if age < 18:
+                age_group = "children"
+            elif age > 50:
+                age_group = "seniors"
+            limits = limits_db[gender_key].get(age_group, limits_db.get("default", {}))
+        else:
+            limits = limits_db.get("default", {})
+    else:
+        limits = limits_db.get("default", {})
+
     for nutrient, rule in limits.items():
         key_100g = f"{nutrient.lower()}_100g"
         value = nutriments.get(key_100g)
@@ -139,7 +154,7 @@ async def health_check():
     return {"status": "online", "message": "NutriGen Backend Live"}
 
 @app.get("/scan-barcode/{barcode}")
-async def scan_barcode(barcode: str):
+async def scan_barcode(barcode: str, age: int = None, gender: str = None):
     headers = {'User-Agent': 'NutriGen - StudentProject - 1.0'}
     url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
     try:
@@ -150,14 +165,14 @@ async def scan_barcode(barcode: str):
 
         product = data.get("product", {})
         product_name = product.get("product_name", "Unknown Product")
-        analysis = analyze_product_data(data)
+        analysis = analyze_product_data(data, age, gender)
 
         return {"status": "success", "product_name": product_name, "data": analysis}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
 @app.post("/upload-barcode-photo")
-async def upload_barcode_photo(file: UploadFile = File(...)):
+async def upload_barcode_photo(file: UploadFile = File(...), age: int = Form(None), gender: str = Form(None)):
     contents = await file.read()
     image = Image.open(io.BytesIO(contents))
     
@@ -178,7 +193,7 @@ async def upload_barcode_photo(file: UploadFile = File(...)):
     if not detected:
         return {"status": "error", "message": "No barcode detected. Please try a clearer image."}
         
-    return await scan_barcode(detected[0].data.decode("utf-8"))
+    return await scan_barcode(detected[0].data.decode("utf-8"), age, gender)
 
 if __name__ == "__main__":
     import uvicorn

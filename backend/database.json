@@ -134,105 +134,723 @@
         "Sorbitol": "Sugar alcohol that can cause bloating and diarrhea."
     },
     "nutrient_limits": {
-        "sugars": {
-            "max": 10,
-            "unit": "g",
-            "msg": "High sugar; watch for insulin spikes."
+        "default": {
+            "sugars": {
+                "max": 10,
+                "unit": "g",
+                "msg": "High sugar; watch for insulin spikes."
+            },
+            "proteins": {
+                "min": 15,
+                "unit": "g",
+                "msg": "Excellent protein source for muscle recovery."
+            },
+            "salt": {
+                "max": 1.5,
+                "unit": "g",
+                "msg": "High salt/sodium; monitor blood pressure."
+            },
+            "fat": {
+                "max": 20,
+                "unit": "g",
+                "msg": "High total fat content detected."
+            },
+            "saturated-fat": {
+                "max": 5,
+                "unit": "g",
+                "msg": "High saturated fat; potential cardiovascular impact."
+            },
+            "fiber": {
+                "min": 5,
+                "unit": "g",
+                "msg": "High fiber; excellent for gut health and digestion."
+            },
+            "iron": {
+                "min": 2,
+                "unit": "mg",
+                "msg": "Good source of iron for oxygen transport."
+            },
+            "calcium": {
+                "min": 150,
+                "unit": "mg",
+                "msg": "Significant calcium for bone density."
+            },
+            "vitamin-c": {
+                "min": 20,
+                "unit": "mg",
+                "msg": "High Vitamin C; boosts immunity."
+            },
+            "vitamin-a": {
+                "min": 150,
+                "unit": "\u00c2\u00b5g",
+                "msg": "Supports vision and skin health."
+            },
+            "vitamin-d": {
+                "min": 2,
+                "unit": "\u00c2\u00b5g",
+                "msg": "Supports bone health and immunity."
+            },
+            "potassium": {
+                "min": 300,
+                "unit": "mg",
+                "msg": "Supports heart and muscle function."
+            },
+            "magnesium": {
+                "min": 50,
+                "unit": "mg",
+                "msg": "Supports nerve function and energy."
+            },
+            "cholesterol": {
+                "max": 20,
+                "unit": "mg",
+                "msg": "Monitor cholesterol for heart health."
+            },
+            "trans-fat": {
+                "max": 0.1,
+                "unit": "g",
+                "msg": "Avoid trans-fats; linked to inflammation."
+            },
+            "energy-kcal": {
+                "max": 500,
+                "unit": "kcal",
+                "msg": "High-calorie density per 100g."
+            },
+            "zinc": {
+                "min": 2,
+                "unit": "mg",
+                "msg": "Supports immune system enzyme function."
+            },
+            "vitamin-b12": {
+                "min": 0.5,
+                "unit": "\u00c2\u00b5g",
+                "msg": "Essential for nerve tissue and red blood cells."
+            },
+            "polyunsaturated-fat": {
+                "min": 5,
+                "unit": "g",
+                "msg": "Contains healthy omega-3/6 fats."
+            },
+            "phosphorus": {
+                "min": 100,
+                "unit": "mg",
+                "msg": "Aids in bone and teeth formation."
+            }
         },
-        "proteins": {
-            "min": 15,
-            "unit": "g",
-            "msg": "Excellent protein source for muscle recovery."
+        "male": {
+            "children": {
+                "sugars": {
+                    "max": 8,
+                    "unit": "g",
+                    "msg": "Watch sugar for kids."
+                },
+                "proteins": {
+                    "min": 15,
+                    "unit": "g",
+                    "msg": "Excellent protein source for muscle recovery."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Good source of iron for oxygen transport."
+                },
+                "calcium": {
+                    "min": 150,
+                    "unit": "mg",
+                    "msg": "Significant calcium for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            },
+            "adults": {
+                "sugars": {
+                    "max": 10,
+                    "unit": "g",
+                    "msg": "High sugar; watch for insulin spikes."
+                },
+                "proteins": {
+                    "min": 20,
+                    "unit": "g",
+                    "msg": "Good protein for male adult."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 8,
+                    "unit": "mg",
+                    "msg": "Standard iron need."
+                },
+                "calcium": {
+                    "min": 150,
+                    "unit": "mg",
+                    "msg": "Significant calcium for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            },
+            "seniors": {
+                "sugars": {
+                    "max": 10,
+                    "unit": "g",
+                    "msg": "High sugar; watch for insulin spikes."
+                },
+                "proteins": {
+                    "min": 20,
+                    "unit": "g",
+                    "msg": "Excellent protein source for muscle recovery."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Good source of iron for oxygen transport."
+                },
+                "calcium": {
+                    "min": 1200,
+                    "unit": "mg",
+                    "msg": "High calcium needed for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            }
         },
-        "salt": {
-            "max": 1.5,
-            "unit": "g",
-            "msg": "High salt/sodium; monitor blood pressure."
-        },
-        "fat": {
-            "max": 20,
-            "unit": "g",
-            "msg": "High total fat content detected."
-        },
-        "saturated-fat": {
-            "max": 5,
-            "unit": "g",
-            "msg": "High saturated fat; potential cardiovascular impact."
-        },
-        "fiber": {
-            "min": 5,
-            "unit": "g",
-            "msg": "High fiber; excellent for gut health and digestion."
-        },
-        "iron": {
-            "min": 2,
-            "unit": "mg",
-            "msg": "Good source of iron for oxygen transport."
-        },
-        "calcium": {
-            "min": 150,
-            "unit": "mg",
-            "msg": "Significant calcium for bone density."
-        },
-        "vitamin-c": {
-            "min": 20,
-            "unit": "mg",
-            "msg": "High Vitamin C; boosts immunity."
-        },
-        "vitamin-a": {
-            "min": 150,
-            "unit": "\u00c2\u00b5g",
-            "msg": "Supports vision and skin health."
-        },
-        "vitamin-d": {
-            "min": 2,
-            "unit": "\u00c2\u00b5g",
-            "msg": "Supports bone health and immunity."
-        },
-        "potassium": {
-            "min": 300,
-            "unit": "mg",
-            "msg": "Supports heart and muscle function."
-        },
-        "magnesium": {
-            "min": 50,
-            "unit": "mg",
-            "msg": "Supports nerve function and energy."
-        },
-        "cholesterol": {
-            "max": 20,
-            "unit": "mg",
-            "msg": "Monitor cholesterol for heart health."
-        },
-        "trans-fat": {
-            "max": 0.1,
-            "unit": "g",
-            "msg": "Avoid trans-fats; linked to inflammation."
-        },
-        "energy-kcal": {
-            "max": 500,
-            "unit": "kcal",
-            "msg": "High-calorie density per 100g."
-        },
-        "zinc": {
-            "min": 2,
-            "unit": "mg",
-            "msg": "Supports immune system enzyme function."
-        },
-        "vitamin-b12": {
-            "min": 0.5,
-            "unit": "\u00c2\u00b5g",
-            "msg": "Essential for nerve tissue and red blood cells."
-        },
-        "polyunsaturated-fat": {
-            "min": 5,
-            "unit": "g",
-            "msg": "Contains healthy omega-3/6 fats."
-        },
-        "phosphorus": {
-            "min": 100,
-            "unit": "mg",
-            "msg": "Aids in bone and teeth formation."
+        "female": {
+            "children": {
+                "sugars": {
+                    "max": 8,
+                    "unit": "g",
+                    "msg": "Watch sugar for kids."
+                },
+                "proteins": {
+                    "min": 12,
+                    "unit": "g",
+                    "msg": "Excellent protein source for muscle recovery."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Good source of iron for oxygen transport."
+                },
+                "calcium": {
+                    "min": 150,
+                    "unit": "mg",
+                    "msg": "Significant calcium for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            },
+            "adults": {
+                "sugars": {
+                    "max": 10,
+                    "unit": "g",
+                    "msg": "High sugar; watch for insulin spikes."
+                },
+                "proteins": {
+                    "min": 15,
+                    "unit": "g",
+                    "msg": "Excellent protein source for muscle recovery."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 18,
+                    "unit": "mg",
+                    "msg": "Higher iron needed for adult females."
+                },
+                "calcium": {
+                    "min": 150,
+                    "unit": "mg",
+                    "msg": "Significant calcium for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            },
+            "seniors": {
+                "sugars": {
+                    "max": 10,
+                    "unit": "g",
+                    "msg": "High sugar; watch for insulin spikes."
+                },
+                "proteins": {
+                    "min": 15,
+                    "unit": "g",
+                    "msg": "Excellent protein source for muscle recovery."
+                },
+                "salt": {
+                    "max": 1.5,
+                    "unit": "g",
+                    "msg": "High salt/sodium; monitor blood pressure."
+                },
+                "fat": {
+                    "max": 20,
+                    "unit": "g",
+                    "msg": "High total fat content detected."
+                },
+                "saturated-fat": {
+                    "max": 5,
+                    "unit": "g",
+                    "msg": "High saturated fat; potential cardiovascular impact."
+                },
+                "fiber": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "High fiber; excellent for gut health and digestion."
+                },
+                "iron": {
+                    "min": 8,
+                    "unit": "mg",
+                    "msg": "Good source of iron for oxygen transport."
+                },
+                "calcium": {
+                    "min": 1200,
+                    "unit": "mg",
+                    "msg": "High calcium needed for bone density."
+                },
+                "vitamin-c": {
+                    "min": 20,
+                    "unit": "mg",
+                    "msg": "High Vitamin C; boosts immunity."
+                },
+                "vitamin-a": {
+                    "min": 150,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports vision and skin health."
+                },
+                "vitamin-d": {
+                    "min": 2,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Supports bone health and immunity."
+                },
+                "potassium": {
+                    "min": 300,
+                    "unit": "mg",
+                    "msg": "Supports heart and muscle function."
+                },
+                "magnesium": {
+                    "min": 50,
+                    "unit": "mg",
+                    "msg": "Supports nerve function and energy."
+                },
+                "cholesterol": {
+                    "max": 20,
+                    "unit": "mg",
+                    "msg": "Monitor cholesterol for heart health."
+                },
+                "trans-fat": {
+                    "max": 0.1,
+                    "unit": "g",
+                    "msg": "Avoid trans-fats; linked to inflammation."
+                },
+                "energy-kcal": {
+                    "max": 500,
+                    "unit": "kcal",
+                    "msg": "High-calorie density per 100g."
+                },
+                "zinc": {
+                    "min": 2,
+                    "unit": "mg",
+                    "msg": "Supports immune system enzyme function."
+                },
+                "vitamin-b12": {
+                    "min": 0.5,
+                    "unit": "\u00c2\u00b5g",
+                    "msg": "Essential for nerve tissue and red blood cells."
+                },
+                "polyunsaturated-fat": {
+                    "min": 5,
+                    "unit": "g",
+                    "msg": "Contains healthy omega-3/6 fats."
+                },
+                "phosphorus": {
+                    "min": 100,
+                    "unit": "mg",
+                    "msg": "Aids in bone and teeth formation."
+                }
+            }
         }
     }
 }

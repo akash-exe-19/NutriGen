@@ -12,13 +12,14 @@ function App() {
     const [analysisData, setAnalysisData] = useState(null);
     const [productName, setProductName] = useState('');
     const [dietHistory, setDietHistory] = useState([]);
-    const [totals, setTotals] = useState({ sugar: 0, protein: 0 });
+    const [totals, setTotals] = useState({ sugar: 0, protein: 0, calories: 0 });
+    const [profileData, setProfileData] = useState({ age: '', gender: 'male', height: '', weight: '' });
 
     // Auth & Form States
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [barcode, setBarcode] = useState('');
-    const [manualEntry, setManualEntry] = useState({ name: '', sugar: '', protein: '' });
+    const [manualEntry, setManualEntry] = useState({ name: '', sugar: '', protein: '', calories: '' });
 
     // Quiz States
     const [goal, setGoal] = useState('Energy');
@@ -27,10 +28,23 @@ function App() {
     const symptomList = ["Fatigue", "Stress", "Poor Sleep", "Muscle Cramps", "Brain Fog", "Joint Pain", "Brittle Nails", "Anxiety", "Dry Eyes", "Bloating"];
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            const currentUser = session?.user ?? null;
+            setUser(currentUser);
+            if (currentUser && (!currentUser.user_metadata?.age || !currentUser.user_metadata?.height)) {
+                setView('profile_setup');
+            } else if (currentUser) {
+                setView('choice');
+            }
+        });
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-            if (session?.user) setView('choice');
+            const currentUser = session?.user ?? null;
+            setUser(currentUser);
+            if (currentUser && (!currentUser.user_metadata?.age || !currentUser.user_metadata?.height)) {
+                setView('profile_setup');
+            } else if (currentUser) {
+                setView('choice');
+            }
         });
         return () => subscription.unsubscribe();
     }, []);
@@ -39,18 +53,19 @@ function App() {
     const calculateTotals = (data) => {
         let tSugar = 0;
         let tProtein = 0;
+        let tCalories = 0;
         data.forEach(item => {
             if (item.analysis_json) {
                 item.analysis_json.forEach(flag => {
-                    // Regex searches for any number following a label like "Sugar: "
                     const match = flag.rsid.match(/(\d+(\.\d+)?)/);
                     const val = match ? parseFloat(match[0]) : 0;
                     if (flag.rsid.toLowerCase().includes('sugar')) tSugar += val;
                     if (flag.rsid.toLowerCase().includes('protein')) tProtein += val;
+                    if (flag.rsid.toLowerCase().includes('energy-kcal') || flag.rsid.toLowerCase().includes('calories')) tCalories += val;
                 });
             }
         });
-        setTotals({ sugar: tSugar.toFixed(1), protein: tProtein.toFixed(1) });
+        setTotals({ sugar: tSugar.toFixed(1), protein: tProtein.toFixed(1), calories: tCalories.toFixed(0) });
     };
 
     const fetchDietPlan = async () => {
@@ -83,10 +98,39 @@ function App() {
     // --- SEARCH HANDLERS ---
     const goHome = () => { setAnalysisData(null); setProductName(''); setBarcode(''); setView('choice'); };
 
+    const handleProfileSubmit = async () => {
+        setIsLoading(true);
+        const { data, error } = await supabase.auth.updateUser({
+            data: { 
+                age: parseInt(profileData.age), 
+                gender: profileData.gender, 
+                height: parseFloat(profileData.height), 
+                weight: parseFloat(profileData.weight) 
+            }
+        });
+        if (error) alert(error.message);
+        else {
+            setUser(data.user);
+            setView('choice');
+        }
+        setIsLoading(false);
+    };
+
+    const getBMR = () => {
+        if (!user || !user.user_metadata?.age || !user.user_metadata?.height || !user.user_metadata?.weight) return 2000;
+        const { age, gender, height, weight } = user.user_metadata;
+        let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+        bmr += (gender.toLowerCase() === 'male') ? 5 : -161;
+        return Math.round(bmr * 1.2);
+    };
+
     const handleBarcodeSearch = async (val = barcode) => {
         if (!val) return; setIsLoading(true);
         try {
-            const response = await fetch(`https://nutrigen-f092.onrender.com/scan-barcode/${val}`);
+            const age = user?.user_metadata?.age || '';
+            const gender = user?.user_metadata?.gender || '';
+            const queryParams = (age && gender) ? `?age=${age}&gender=${gender}` : '';
+            const response = await fetch(`https://nutrigen-f092.onrender.com/scan-barcode/${val}${queryParams}`);
             const result = await response.json();
             if (result.status === "success") { setAnalysisData(result.data); setProductName(result.product_name); }
         } catch (err) { alert("Barcode failed"); } finally { setIsLoading(false); }
@@ -95,6 +139,8 @@ function App() {
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0]; if (!file) return; setIsLoading(true);
         const formData = new FormData(); formData.append("file", file);
+        if (user?.user_metadata?.age) formData.append("age", user.user_metadata.age);
+        if (user?.user_metadata?.gender) formData.append("gender", user.user_metadata.gender);
         try {
             const response = await fetch("https://nutrigen-f092.onrender.com/upload-barcode-photo", { method: "POST", body: formData });
             const result = await response.json();
@@ -210,12 +256,30 @@ const handleSignUp = async () => {
             <main>
                 {analysisData ? (
                     <div style={styles.resultsHeader}>
-                        <h2 style={styles.productTitle}>{productName}</h2>
+                        <h2 style={styles.productTitle}>
+                            {productName}
+                            <span style={{fontSize: '1rem', color: '#888', marginLeft: '10px'}}>
+                                ({analysisData.find(i => i.rsid.toLowerCase().includes('energy-kcal'))?.rsid.match(/(\d+(\.\d+)?)/)?.[0] || 'Unknown'} kcal)
+                            </span>
+                        </h2>
                         <div style={{display: 'flex', gap: '10px', marginBottom: '20px'}}>
                             <button style={styles.primaryBtn} onClick={() => saveToDietPlan()}>Add to Plan</button>
                             <button style={styles.secondaryBtn} onClick={() => setAnalysisData(null)}>Discard</button>
                         </div>
                         <Dashboard data={analysisData} onReset={() => setAnalysisData(null)} />
+                    </div>
+                ) : view === 'profile_setup' ? (
+                    <div style={styles.card}>
+                        <h3>Complete Your Profile</h3>
+                        <p style={{color: '#aaa', fontSize: '0.9rem'}}>This helps us calculate personalized nutrient limits and BMR.</p>
+                        <select style={styles.input} value={profileData.gender} onChange={e => setProfileData({...profileData, gender: e.target.value})}>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <input style={styles.input} type="number" placeholder="Age (years)" onChange={e => setProfileData({...profileData, age: e.target.value})} />
+                        <input style={styles.input} type="number" placeholder="Height (cm)" onChange={e => setProfileData({...profileData, height: e.target.value})} />
+                        <input style={styles.input} type="number" placeholder="Weight (kg)" onChange={e => setProfileData({...profileData, weight: e.target.value})} />
+                        <button style={{...styles.primaryBtn, width: '100%', marginTop: '10px'}} onClick={handleProfileSubmit}>Save Profile</button>
                     </div>
                 ) : view === 'choice' ? (
                     <div style={styles.menuGrid}>
@@ -226,8 +290,9 @@ const handleSignUp = async () => {
                 ) : view === 'view_plan' ? (
                     <div style={styles.planView}>
                         <div style={styles.summaryCard}>
-                            <h3 style={{marginTop: 0}}>Daily Summary</h3>
-                            <div style={{display: 'flex', gap: '40px'}}>
+                            <h3 style={{marginTop: 0}}>Daily Summary (Limit: {getBMR()} kcal)</h3>
+                            <div style={{display: 'flex', gap: '40px', flexWrap: 'wrap'}}>
+                                <div><small>Calories</small><div style={styles.summaryVal}>{totals.calories}</div></div>
                                 <div><small>Total Sugar</small><div style={styles.summaryVal}>{totals.sugar}g</div></div>
                                 <div><small>Total Protein</small><div style={styles.summaryVal}>{totals.protein}g</div></div>
                             </div>
@@ -265,13 +330,15 @@ const handleSignUp = async () => {
                     <div style={styles.card}>
                         <h3>Manual Log</h3>
                         <input style={styles.input} placeholder="Food Name" onChange={e => setManualEntry({...manualEntry, name: e.target.value})} />
-                        <div style={{display: 'flex', gap: '10px'}}>
-                            <input style={styles.input} type="number" placeholder="Sugar (g)" onChange={e => setManualEntry({...manualEntry, sugar: e.target.value})} />
-                            <input style={styles.input} type="number" placeholder="Protein (g)" onChange={e => setManualEntry({...manualEntry, protein: e.target.value})} />
+                        <div style={{display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
+                            <input style={{...styles.input, flex: 1, minWidth: '80px'}} type="number" placeholder="Calories" onChange={e => setManualEntry({...manualEntry, calories: e.target.value})} />
+                            <input style={{...styles.input, flex: 1, minWidth: '80px'}} type="number" placeholder="Sugar (g)" onChange={e => setManualEntry({...manualEntry, sugar: e.target.value})} />
+                            <input style={{...styles.input, flex: 1, minWidth: '80px'}} type="number" placeholder="Protein (g)" onChange={e => setManualEntry({...manualEntry, protein: e.target.value})} />
                         </div>
                         <button style={styles.primaryBtn} onClick={() => saveToDietPlan({
                             product_name: manualEntry.name, user_id: user.id,
                             analysis_json: [
+                                { rsid: `Energy-kcal: ${manualEntry.calories}kcal`, trait: "Manual", genotype: "User", recommendation: "Logged manually." },
                                 { rsid: `Sugar: ${manualEntry.sugar}g`, trait: "Manual", genotype: "User", recommendation: "Logged manually." },
                                 { rsid: `Protein: ${manualEntry.protein}g`, trait: "Manual", genotype: "User", recommendation: "Logged manually." }
                             ]
