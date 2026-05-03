@@ -13,7 +13,7 @@ function App() {
     const [productName, setProductName] = useState('');
     const [dietHistory, setDietHistory] = useState([]);
     const [totals, setTotals] = useState({ sugar: 0, protein: 0, calories: 0 });
-    const [profileData, setProfileData] = useState({ age: '', gender: 'male', height: '', weight: '' });
+    const [profileData, setProfileData] = useState({ username: '', age: '', gender: 'male', height: '', weight: '' });
 
     // Auth & Form States
     const [email, setEmail] = useState('');
@@ -102,6 +102,7 @@ function App() {
         setIsLoading(true);
         const { data, error } = await supabase.auth.updateUser({
             data: { 
+                username: profileData.username,
                 age: parseInt(profileData.age), 
                 gender: profileData.gender, 
                 height: parseFloat(profileData.height), 
@@ -250,7 +251,19 @@ const handleSignUp = async () => {
         <div style={styles.container}>
             <header style={styles.nav}>
                 <h1 style={styles.logoText} onClick={goHome}>NutriGen<span style={{color: '#38a169'}}>.</span></h1>
-                <button onClick={() => supabase.auth.signOut()} style={styles.logoutBtn}>Logout</button>
+                <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                    <button onClick={() => {
+                        setProfileData({
+                            username: user?.user_metadata?.username || '',
+                            age: user?.user_metadata?.age || '',
+                            gender: user?.user_metadata?.gender || 'male',
+                            height: user?.user_metadata?.height || '',
+                            weight: user?.user_metadata?.weight || ''
+                        });
+                        setView('profile_setup');
+                    }} style={styles.logoutBtn}>👤 Profile</button>
+                    <button onClick={() => supabase.auth.signOut()} style={styles.logoutBtn}>Logout</button>
+                </div>
             </header>
 
             <main>
@@ -270,16 +283,22 @@ const handleSignUp = async () => {
                     </div>
                 ) : view === 'profile_setup' ? (
                     <div style={styles.card}>
-                        <h3>Complete Your Profile</h3>
+                        <h3>{user?.user_metadata?.age ? 'Edit Profile' : 'Complete Your Profile'}</h3>
                         <p style={{color: '#aaa', fontSize: '0.9rem'}}>This helps us calculate personalized nutrient limits and BMR.</p>
+                        <input style={styles.input} type="text" placeholder="Username (Optional)" value={profileData.username} onChange={e => setProfileData({...profileData, username: e.target.value})} />
                         <select style={styles.input} value={profileData.gender} onChange={e => setProfileData({...profileData, gender: e.target.value})}>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
-                        <input style={styles.input} type="number" placeholder="Age (years)" onChange={e => setProfileData({...profileData, age: e.target.value})} />
-                        <input style={styles.input} type="number" placeholder="Height (cm)" onChange={e => setProfileData({...profileData, height: e.target.value})} />
-                        <input style={styles.input} type="number" placeholder="Weight (kg)" onChange={e => setProfileData({...profileData, weight: e.target.value})} />
-                        <button style={{...styles.primaryBtn, width: '100%', marginTop: '10px'}} onClick={handleProfileSubmit}>Save Profile</button>
+                        <input style={styles.input} type="number" placeholder="Age (years)" value={profileData.age} onChange={e => setProfileData({...profileData, age: e.target.value})} />
+                        <input style={styles.input} type="number" placeholder="Height (cm)" value={profileData.height} onChange={e => setProfileData({...profileData, height: e.target.value})} />
+                        <input style={styles.input} type="number" placeholder="Weight (kg)" value={profileData.weight} onChange={e => setProfileData({...profileData, weight: e.target.value})} />
+                        <div style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
+                            <button style={{...styles.primaryBtn, flex: 1}} onClick={handleProfileSubmit}>Save</button>
+                            {user?.user_metadata?.age && (
+                                <button style={{...styles.secondaryBtn, flex: 1}} onClick={() => setView('choice')}>Cancel</button>
+                            )}
+                        </div>
                     </div>
                 ) : view === 'choice' ? (
                     <div style={styles.menuGrid}>
