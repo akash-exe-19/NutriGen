@@ -125,6 +125,13 @@ function App() {
         return Math.round(bmr * 1.2);
     };
 
+    const getBMI = () => {
+        if (!user || !user.user_metadata?.height || !user.user_metadata?.weight) return null;
+        const h = user.user_metadata.height / 100;
+        const bmi = user.user_metadata.weight / (h * h);
+        return bmi.toFixed(1);
+    };
+
     const handleBarcodeSearch = async (val = barcode) => {
         if (!val) return; setIsLoading(true);
         try {
@@ -309,9 +316,11 @@ const handleSignUp = async () => {
                 ) : view === 'view_plan' ? (
                     <div style={styles.planView}>
                         <div style={styles.summaryCard}>
-                            <h3 style={{marginTop: 0}}>Daily Summary (Limit: {getBMR()} kcal)</h3>
-                            <div style={{display: 'flex', gap: '40px', flexWrap: 'wrap'}}>
-                                <div><small>Calories</small><div style={styles.summaryVal}>{totals.calories}</div></div>
+                            <h3 style={{marginTop: 0}}>Daily Summary</h3>
+                            <div style={{display: 'flex', gap: '30px', flexWrap: 'wrap'}}>
+                                <div><small>Calories Logged</small><div style={styles.summaryVal}>{totals.calories}</div></div>
+                                <div><small>Daily Target</small><div style={styles.summaryVal}>{getBMR()}</div></div>
+                                <div><small>Your BMI</small><div style={styles.summaryVal}>{getBMI() || '--'}</div></div>
                                 <div><small>Total Sugar</small><div style={styles.summaryVal}>{totals.sugar}g</div></div>
                                 <div><small>Total Protein</small><div style={styles.summaryVal}>{totals.protein}g</div></div>
                             </div>
