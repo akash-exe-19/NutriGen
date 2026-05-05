@@ -352,6 +352,10 @@ const handleSignUp = async () => {
                         <div style={{margin: '20px 0', textAlign: 'center', color: '#444'}}>OR</div>
                         <input type="file" id="barcode-photo" hidden accept="image/*" onChange={handlePhotoUpload} />
                         <label htmlFor="barcode-photo" style={styles.btnSecondary}>📷 Upload Photo</label>
+                        
+                        <input type="file" id="barcode-camera" hidden accept="image/*" capture="environment" onChange={handlePhotoUpload} />
+                        <label htmlFor="barcode-camera" style={{...styles.btnSecondary, marginTop: '10px'}}>📸 Take Photo</label>
+
                         <button style={styles.backBtn} onClick={() => setView('choice')}>Back</button>
                     </div>
                 ) : view === 'manual_log' ? (

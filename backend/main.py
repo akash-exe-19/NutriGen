@@ -16,7 +16,7 @@ app = FastAPI()
 # --- CORS SETTINGS --
 origins = [
     "http://localhost:3000",
-    "https://nutrigen-site.netlify.app", 
+    "https://nutri-gen.vercel.app",
     "*"
 ]
 
